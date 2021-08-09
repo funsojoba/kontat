@@ -1,4 +1,4 @@
-import { FETCH_CONTACT, FETCH_CONTACT_FAILED, FETCH_CONTACT_SUCCESSFUL, SEARCH } from "../actions/types";
+import { FETCH_CONTACT, FETCH_CONTACT_FAILED, FETCH_CONTACT_SUCCESSFUL } from "../actions/types";
 
 const initialState = {
     contacts:[]
