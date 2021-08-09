@@ -2,6 +2,9 @@ import { REGISTER_SUCCESS, REGISTER_FAILED } from "../types";
 import axios from "axios";
 import { toast } from "react-toastify";
 
+
+import BASEURL from "../../../baseURL";
+
 const registerSuccess = (payload) => ({
     type: REGISTER_SUCCESS,
     payload,
@@ -14,7 +17,7 @@ const registerFailed = (payload) => ({
 
 const register = (payload) => async (dispatch) => {
         console.log('From payload',payload)
-        axios.post("http://127.0.0.1:8000/auth/register/", payload)
+        axios.post(BASEURL+"auth/register/", payload)
         .then(res =>{
             toast.success("Welcome on board")
             return dispatch(registerSuccess(res))

@@ -1,6 +1,7 @@
 import { ADD_CONTACT_SUCCESSFUL, ADD_CONTACT_FAILED } from "../types";
 import axios from "axios";
 import { headers } from "../../../request";
+import BASEURL from "../../../baseURL";
 
 const token = localStorage.getItem('token')
 
@@ -17,7 +18,7 @@ const addContactSuccess = payload =>({
 })
 
 const addContact = (payload)=> dispatch =>{
-    axios.post('http://127.0.0.1:8000/api/v1/create-contact', payload, headers(token))
+    axios.post(BASEURL+'api/v1/create-contact', payload, headers(token))
     .then(res =>{
         dispatch(addContactSuccess(res.data))
         setInterval(function () {

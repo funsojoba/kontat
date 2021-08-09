@@ -2,6 +2,7 @@ import {CONTACT_DETAIL_SUCCESS, CONTACT_DETAIL_FAILED} from '../types'
 
 import axios from 'axios'
 import { headers } from '../../../request'
+import BASEURL from '../../../baseURL'
 
 const token = localStorage.getItem('token')
 
@@ -17,7 +18,7 @@ const contactDetailSuccess = payload => ({
 })
 
 const getContactDetail = (id) => dispatch =>{
-    axios.get('http://127.0.0.1:8000/api/v1/contact/'+id, headers(token))
+    axios.get(BASEURL+'api/v1/contact/'+id, headers(token))
     .then(res => {
         dispatch(contactDetailSuccess(res.data))
     }).catch(err =>{

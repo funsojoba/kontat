@@ -2,6 +2,7 @@ import axios from "axios";
 import { LOGIN_SUCCESS, LOGIN_FAILED } from "../types";
 import { toast } from "react-toastify";
 // import { Redirect } from "react-router-dom";
+import BASEURL from "../../../baseURL";
 
 const loginSuccess = (payload) => ({
     type: LOGIN_SUCCESS,
@@ -15,7 +16,7 @@ const loginFailure = (payload) => ({
 
 const login = (payload) =>{
     return function (dispatch){
-        axios.post('http://127.0.0.1:8000/auth/login/', payload)
+        axios.post(BASEURL+'auth/login/', payload)
         .then(res =>{
             toast.success('Welcome back')
             dispatch(loginSuccess(res))

@@ -2,6 +2,7 @@ import { UPDATE_CONTACT_SUCCESSFUL, UPDATE_CONTACT_FAILED } from "../types";
 import axios from "axios";
 import { headers } from "../../../request";
 import { toast } from "react-toastify";
+import BASEURL from "../../../baseURL";
 
 const token = localStorage.getItem('token')
 
@@ -21,7 +22,7 @@ const updateContactFailed = (payload) => {
 
 
 const updateContact = (payload, id) => dispatch => {
-    axios.put('http://127.0.0.1:8000/api/v1/update-contact/'+id, payload, headers(token))
+    axios.put(BASEURL+'api/v1/update-contact/'+id, payload, headers(token))
     .then(res => {
         dispatch(updateContactSuccess(res.data))
         toast.success("Contact updated")
