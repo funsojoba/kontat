@@ -21,8 +21,13 @@ import getContactAvatar from "../../../redux/actions/contacts/contactAvatar.acti
 import { Body, Container, DetailSection, ImageDiv, Name, NumberDiv, Socials, DeleteDiv, Form, Small, Arrow, ErrMsg } from './detailStyle'
 import validateMail from "./validateMail";
 
-const DetailPage = ({ sendMail, match, updateContact, getContactDetail, contactDetailData, deleteContact, getContactAvatar }) => {
+import Loader from 'react-spinners/SyncLoader'
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+
+
+const DetailPage = ({ sendMail, match, updateContact, getContactDetail, contactDetailData, deleteContact, getContactAvatar, contactAvatar, getUpdateContact, sendMailDetail, deleteContactDetail }) => {
     let id = match.params.id
+    console.log(deleteContactDetail)
 
     useEffect(()=> getContactDetail(id), [getContactDetail, id])
 
@@ -38,12 +43,12 @@ const DetailPage = ({ sendMail, match, updateContact, getContactDetail, contactD
         setToggleModal(!toggleModal)
     }
 
-    const firstInitial = contactDetailData.first_name.slice(0, 1).toUpperCase()
-    const lastInitial = contactDetailData.last_name.slice(0, 1).toUpperCase()
+    const firstInitial = contactDetailData.first_name ? contactDetailData.first_name.slice(0, 1).toUpperCase() : null
+    const lastInitial = contactDetailData.last_name ? contactDetailData.last_name.slice(0, 1).toUpperCase() : null
     return <>
         <ToastContainer />
         <Header  display="none" count={firstInitial + lastInitial } />
-        <DeleteModal onClick={()=>deleteContact(id)} name={contactDetailData.first_name} display={toggleModal ? 'flex' : 'none'} close={() => setToggleModal(false)}></DeleteModal>
+        <DeleteModal label={deleteContactDetail} onClick={()=>deleteContact(id)} name={contactDetailData.first_name} display={toggleModal ? 'flex' : 'none'} close={() => setToggleModal(false)}></DeleteModal>
         <Body>
             <Arrow onClick={previous}>
                 <i className="fas fa-long-arrow-alt-left fa-lg"></i>
@@ -72,7 +77,7 @@ const DetailPage = ({ sendMail, match, updateContact, getContactDetail, contactD
                                         id="avatar"
                                         />
                                     <ErrMsg>{touched.avatar && errors.avatar ? errors.avatar : null}</ErrMsg>
-                                    <Button type="submit">Upload</Button>
+                                    <Button type="submit">{contactAvatar && contactAvatar.loading ? <Loader color="#fff" /> : 'upload'}</Button>
                                 </Form>
                             )}
                         </Formik>
@@ -104,6 +109,8 @@ const DetailPage = ({ sendMail, match, updateContact, getContactDetail, contactD
                 </DetailSection>
             </Container>
 
+
+{/******* UPDATE CONTACT SECTION */}
             <Container>
                 <Small>
                     <p>Update {contactDetailData.first_name}'s contact</p>
@@ -197,13 +204,14 @@ const DetailPage = ({ sendMail, match, updateContact, getContactDetail, contactD
                             onBlur={handleBlur}
                             name="state" />
                         <Button
-                            type="submit">Update Contact</Button>
+                                type="submit">{getUpdateContact && getUpdateContact.loading ? <Loader color="#fff"/>: 'update contact'}</Button>
                     </Form>
                     )}
                 </Formik>
 
             </Container>
 
+{/****** SEND MAIL SECTION  */}
             <Container>
                 <Small>
                     <p>Send mail to {contactDetailData.first_name}</p>
@@ -237,7 +245,11 @@ const DetailPage = ({ sendMail, match, updateContact, getContactDetail, contactD
                                 name="message"></TextArea>
                             <ErrMsg>{touched.message && errors.message ? errors.message : null}</ErrMsg>
 
-                            <Button type="submit"> <i className="far fa-paper-plane"></i> Send mail</Button>
+                            <Button type="submit"> 
+                                {sendMailDetail && sendMailDetail.loading ? 
+                                    (<Loader color="#fff"/>) : 
+                                    (<><i className=" far fa-paper-plane"></i> Send mail</>)}
+                            </Button>
                         </Form>
                     )}
                 </Formik>
@@ -247,12 +259,12 @@ const DetailPage = ({ sendMail, match, updateContact, getContactDetail, contactD
 }
 
 const mapStateToProps = (state, ownProps) => {
-    // let id = ownProps.match.params.id
     return {
-        // detail: state.contactReducer.contacts.data.find(detail => detail.id === id),
         sendMailDetail: state.sendMailReducer,
-        updateContact: state.updateContactReducer,
-        contactDetailData: state.contactDetailReducer.detail
+        getUpdateContact: state.updateContactReducer,
+        contactDetailData: state.contactDetailReducer.detail,
+        contactAvatar: state.contactAvatarReducer,
+        deleteContactDetail: state.deleteContactReducer
     }
 }
 

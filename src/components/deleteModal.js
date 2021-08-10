@@ -2,6 +2,10 @@
 import styled, { keyframes } from "styled-components";
 import Button from "./button";
 
+import Loader from 'react-spinners/SyncLoader'
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+
+
 const slideIn = keyframes`
     0% {transform:translateY(-10px); opacity:0}
     100% {transform:translateY(0); opacity:1}
@@ -65,7 +69,7 @@ const Btns = styled.div`
 `
 
 
-const DeleteModal = ({ display, close, name, onClick }) => {
+const DeleteModal = ({ display, close, name, onClick, label }) => {
     return <Body display={display}>
         <DivWrapper>
             <Icon>
@@ -75,7 +79,10 @@ const DeleteModal = ({ display, close, name, onClick }) => {
                 <h3>Are you sure you want to delete {name}'s contact?</h3>
                 <Btns>
                     <Button onClick={close} >Cancle </Button> &nbsp;
-                    <Button onClick={onClick} background="#FF2B5E" border="none">Delete <i class="far fa-trash-alt"></i></Button>
+                    <Button onClick={onClick} background="#FF2B5E" border="none">
+                       
+                        {label && label.loading ? <Loader color="#fff" /> : <> Delete <i class="far fa-trash-alt"></i></>}
+                    </Button>
                 </Btns>
             </Div>
         </DivWrapper>
