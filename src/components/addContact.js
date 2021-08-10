@@ -3,9 +3,12 @@ import Input from './input'
 import Button from './button'
 
 import { Formik } from 'formik'
-import validate from './validator/validator'
-
 import { connect } from 'react-redux'
+import Loader from 'react-spinners/SyncLoader'
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+
+
+import validate from './validator/validator'
 import addContact from '../redux/actions/contacts/addContact.action'
 
 const Div = styled.div`
@@ -47,7 +50,7 @@ const Container = styled.div`
     @media only screen and (max-width:750px){
         width:90%;
     }
-    transform:translateX(${props => props.translate ? props.translate : "-500px"})
+    transform:translateX(${props => props.translate ? props.translate : "-900px"})
 
 `
 const Form = styled.form`
@@ -73,6 +76,7 @@ const Header = styled.div`
 `
 
 const AddContact = ({ translate, handleClose, addContactData, addContact }) => {
+
     return <Container translate={translate}>
         <Div>
             <Header>
@@ -92,26 +96,10 @@ const AddContact = ({ translate, handleClose, addContactData, addContact }) => {
                     twitter: "",
                     linkedin: "",
                     state: "",
-                    avatar: "",
                 }}
                 validationSchema={validate}
                 onSubmit={ async (values) => {
-                    const imageInput = document.querySelector("#coverImage")
-                    let data = new FormData()
-
-                    data.append("first_name", values.first_name)
-                    data.append("last_name", values.last_name)
-                    data.append("email", values.email)
-                    data.append("phone", values.phone)
-                    data.append("facebook", values.facebook)
-                    data.append("instagram", values.instagram)
-                    data.append("twitter", values.twitter)
-                    data.append("linkedin", values.linkedin)
-                    data.append("state", values.state)
-                    data.append("avatar", imageInput.files[0])
-                    data.append("something", "nice")
-
-                    await addContact(data)
+                    await addContact(values)
                 }}
             >
                 {({ handleChange, handleSubmit, values, touched, handleBlur, errors }) => (
@@ -174,18 +162,11 @@ const AddContact = ({ translate, handleClose, addContactData, addContact }) => {
                             onChange={handleChange}
                             value={values.state}
                             name="state" />
-                        <Input
-                            placeholder="User image"
-                            type="file"
-                            onChange={handleChange}
-                            value={values.avatar}
-                            name="avatar"
-                            id="coverImage"
-                        />
+                        
                         <Button
                             background="#fff"
                             color="#525252"
-                            type="submit">Add Contact</Button>
+                            type="submit">{addContactData && addContactData.loading ? (<Loader color="#10BDA8" />): 'upload'}</Button>
                     </Form>
                 )}
             </Formik>

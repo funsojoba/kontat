@@ -20,6 +20,7 @@ const UserProfile = ({ userData, getUserAvatar }) => {
     // useEffect(() => { getUser() }, [getUser])
     const [openModal, setOpenModal] = useState(false)
     const [openResetPassword, setResetPassword] = useState(false)
+    const [loading, setLoading] = useState(false)
 
     const { first_name, last_name, email } = userData.user
 
@@ -34,11 +35,14 @@ const UserProfile = ({ userData, getUserAvatar }) => {
                     initialValues={{ avatar: "" }}
                     validationSchema={validateFile}
                     onSubmit={async values =>{
+                        setLoading(true)
                         const imageInput = document.querySelector("#avatar")
                         let data = new FormData()
                         data.append('avatar', imageInput.files[0])
-                        console.log(imageInput.files)
+                        console.log(loading)
                         await getUserAvatar(data)
+                        setLoading(false)
+                        console.log(loading)
                     }}>
                     {({ touched, errors, values, handleChange, handleSubmit, handleBlur }) => (
                         <Form onSubmit={handleSubmit}>
@@ -49,7 +53,7 @@ const UserProfile = ({ userData, getUserAvatar }) => {
                                 name="avatar"
                                 id="avatar" />
                             <ErrMsg>{touched.avatar && errors.avatar ? errors.avatar : null}</ErrMsg>
-                            <Button type="submit">Upload</Button>
+                            <Button type="submit">{loading ? 'loading...' : 'upload'}</Button>
                         </Form>
                     )}
                 </Formik>

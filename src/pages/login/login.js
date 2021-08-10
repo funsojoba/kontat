@@ -5,11 +5,13 @@ import validate from "./validate"
 import { Body, Div, SmallText, Circle, Paragraph, Section, Form, Image } from './style'
 import { ErrorMsg } from "../register/registerStyles"
 
+import Loader from 'react-spinners/SyncLoader'
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { useState } from "react"
 import { connect } from "react-redux"
 import { Link } from "react-router-dom"
 import { Formik } from "formik"
@@ -19,10 +21,6 @@ import login from "../../redux/actions/auth/login.action"
 
 
 const Register = ({ loginData, login }, props ) => {
-    const [loading, setLoading] = useState(false)
-    // const [isLogin, setIsLogin] = useState(false)
-    
-    // useEffect(()=>{}, [loginData])
 
     return <Body>
         <Div>
@@ -38,9 +36,7 @@ const Register = ({ loginData, login }, props ) => {
                     }}
                     validationSchema={validate}
                     onSubmit={async (values) => {
-                        setLoading(true)
                         await login(values)
-                        setLoading(false)
                     }}>
                     {({ values, errors, handleChange, handleSubmit, touched, handleBlur }) => (
                         <Form onSubmit={handleSubmit}>
@@ -63,9 +59,9 @@ const Register = ({ loginData, login }, props ) => {
                                 onChange={handleChange} />
                             <ErrorMsg>{touched.password && errors.password ? (errors.password) : (null)}</ErrorMsg>
                             <Button type="submit">
-                                {" "}
-                                {loading ? "" : "Log in"}
-                                {/* <PulseLoader loading={loading} /> */}
+                                
+                                {loginData && loginData.loading ? (<Loader color="#fff" />): 'Login'}
+                                
                             </Button>
                         </Form>
                     )}

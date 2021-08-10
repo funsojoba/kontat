@@ -1,9 +1,13 @@
-import { REGISTER_SUCCESS, REGISTER_FAILED } from "../types";
+import { REGISTER_SUCCESS, REGISTER_FAILED, REGISTER } from "../types";
 import axios from "axios";
 import { toast } from "react-toastify";
 
 
 import BASEURL from "../../../baseURL";
+
+const registerStart = () =>({
+    type: REGISTER
+})
 
 const registerSuccess = (payload) => ({
     type: REGISTER_SUCCESS,
@@ -16,10 +20,13 @@ const registerFailed = (payload) => ({
 });
 
 const register = (payload) => async (dispatch) => {
-        console.log('From payload',payload)
+        dispatch(registerStart())
         axios.post(BASEURL+"auth/register/", payload)
         .then(res =>{
             toast.success("Welcome on board")
+            setInterval(function () {
+                window.location = "/login";
+            }, 2500);
             return dispatch(registerSuccess(res))
         }).catch(error =>{
             const err = Object.values(error.response.data.error)[0]

@@ -1,7 +1,10 @@
 import { ADD_CONTACT, ADD_CONTACT_FAILED, ADD_CONTACT_SUCCESSFUL } from "../actions/types";
 
 const initialState = {
-    contact: []
+    contact: [],
+    loading:false,
+    error:null,
+    message:""
 }
 
 
@@ -12,18 +15,20 @@ const addContactReducer = (state=initialState, action)=>{
         case ADD_CONTACT:
             return{
                 ...state,
-                contact: payload
+                loading:true
             }
             
         case ADD_CONTACT_FAILED:
             return {
                 ...state,
-                contact: payload
+                contact: payload,
+                loading:false
             }
         case ADD_CONTACT_SUCCESSFUL:
             return{
                 ...state,
-                contact: payload
+                contact: payload,
+                loading:false
             }
         default:
             return state

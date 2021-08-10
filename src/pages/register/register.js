@@ -4,13 +4,13 @@ import Img from "../../components/img"
 
 import { Link } from "react-router-dom"
 import { Formik } from 'formik'
-import { useState } from "react"
 
 import { connect } from "react-redux"
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import PulseLoader from 'react-spinners/PulseLoader'
+import Loader from 'react-spinners/SyncLoader'
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 import validate from "./register.validate"
 import register from "../../redux/actions/auth/register.action"
@@ -19,11 +19,8 @@ import { Body, Div, SmallText, Circle, P, Section, Form, Image, ErrorMsg } from 
 
 
 
-const Register = ({  registerData, register }) => {
+const Register = ({ registerData, register }) => {
     console.log("registerData:", registerData)
-    const [loading, setLoading] = useState(false)
-    // const [label, setLabel] = useState("Sign Up")
-
 
     return <Body>
         <Div>
@@ -31,7 +28,7 @@ const Register = ({  registerData, register }) => {
 
             <P>Let's get you started</P>
             <Section>
-            <ToastContainer />
+                <ToastContainer />
                 <Formik
                     initialValues={{
                         first_name: "",
@@ -41,9 +38,7 @@ const Register = ({  registerData, register }) => {
                     }}
                     validationSchema={validate}
                     onSubmit={async (values) => {
-                        setLoading(true)
                         await register(values)
-                        setLoading(false)
                     }}>
                     {({ values, errors, handleChange, handleSubmit, touched, handleBlur }) => (
                         <Form onSubmit={handleSubmit}>
@@ -84,10 +79,10 @@ const Register = ({  registerData, register }) => {
                                 value={values.password}
                                 onChange={handleChange} />
                             <ErrorMsg>{touched.password && errors.password ? (errors.password) : (null)}</ErrorMsg>
-                            <Button type="submit"> 
+                            <Button type="submit">
                                 {" "}
-                                {loading ? "" : "Sign up"}
-                                <PulseLoader loading={loading}/>
+                                {registerData && registerData.loading ? (<Loader color="#fff" />) : 'Sign Up'}
+                                
                             </Button>
                         </Form>
                     )}
@@ -111,4 +106,4 @@ const mapStateToProps = (store) => ({
 //     sendRegister: (value) => dispatch(register(value))
 // })
 
-export default connect(mapStateToProps, {register})(Register)
+export default connect(mapStateToProps, { register })(Register)

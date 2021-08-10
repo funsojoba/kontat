@@ -5,8 +5,7 @@ const initialState = {
     data: "",
     loading: false,
     error: "",
-    message: "",
-    loggedIn:false
+    message: ""
 }
 
 const loginReducer = (state = initialState, action) => {
@@ -21,12 +20,11 @@ const loginReducer = (state = initialState, action) => {
             localStorage.setItem("token", payload.data.token)
             return {
                 ...state,
-                loading: true,
+                loading: false,
                 error: null,
                 data: payload.data.token,
                 token: payload.data.token,
-                message: payload.data.message,
-                loggedIn:true
+                message: payload.data.message
             }
 
         case LOGIN_FAILED:
@@ -35,8 +33,7 @@ const loginReducer = (state = initialState, action) => {
                 loading: false,
                 data: null,
                 message: payload.message,
-                error: payload,
-                loggedIn:false
+                error: payload
             }
 
         default:
